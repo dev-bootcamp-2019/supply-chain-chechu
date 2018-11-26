@@ -8,7 +8,7 @@ contract('SupplyChain', function(accounts) {
     const emptyAddress = '0x0000000000000000000000000000000000000000'
 
     var sku
-    const price = web3.toBigNumber(web3.toWei(1, "ether"))
+    const price = web3.toWei(1, "ether")
 
     it("should add an item with the provided name and price", async() => {
         const supplyChain = await SupplyChain.deployed()
@@ -17,13 +17,16 @@ contract('SupplyChain', function(accounts) {
 
         var event = supplyChain.ForSale()
         await event.watch((err, res) => {
+	    console.log('Event ForSale received!', {err}, {res}, res.args.sku)
             sku = res.args.sku.toString(10)
             eventEmitted = true
         })
 
         const name = "book"
 
-        await supplyChain.addItem(name, 1000000000000000000, {from: alice})
+	console.log('Calling addItem...')
+        await supplyChain.addItem(name, price, {from: alice})
+	console.log('addItem done!')
 
         const result = await supplyChain.fetchItem.call(0)
 
