@@ -23,9 +23,9 @@ contract('SupplyChain', function(accounts) {
 
         const name = "book"
 
-        await supplyChain.addItem(name, price, {from: alice})
+        await supplyChain.addItem(name, 1000000000000000000, {from: alice})
 
-        const result = await supplyChain.fetchItem.call(sku)
+        const result = await supplyChain.fetchItem.call(0)
 
         assert.equal(result[0], name, 'the name of the last added item does not match the expected value')
         assert.equal(result[2].toString(10), price, 'the price of the last added item does not match the expected value')
