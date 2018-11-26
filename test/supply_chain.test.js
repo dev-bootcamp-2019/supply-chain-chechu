@@ -17,19 +17,15 @@ contract('SupplyChain', function(accounts) {
 /*
         var event = supplyChain.ForSale()
         await event.watch((err, res) => {
-	    console.log('Event ForSale received!', {err}, {res}, res.args.sku)
             sku = res.args.sku.toString(10)
             eventEmitted = true
         })
 */
         const name = "book"
 
-	console.log('Calling addItem...')
         // await supplyChain.addItem(name, price, {from: alice})
 	const tx = await supplyChain.addItem(name, price, {from: alice})
-	console.log('addItem done!', {tx})
 	if (tx.logs[0].event === "ForSale") {
-	        console.log('Event ForSale received!', tx.logs[0])
 		sku = tx.logs[0].args.sku.toString(10)
 		eventEmitted = true
 	}
@@ -48,19 +44,23 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
 
         var eventEmitted = false
-
+/*
         var event = supplyChain.Sold()
         await event.watch((err, res) => {
             sku = res.args.sku.toString(10)
             eventEmitted = true
         })
-
+*/
         const amount = web3.toWei(2, "ether")
 
         var aliceBalanceBefore = await web3.eth.getBalance(alice).toNumber()
         var bobBalanceBefore = await web3.eth.getBalance(bob).toNumber()
 
-        await supplyChain.buyItem(sku, {from: bob, value: amount})
+        const tx = await supplyChain.buyItem(sku, {from: bob, value: amount})
+	if (tx.logs[0].event === "Sold") {
+		sku = tx.logs[0].args.sku.toString(10)
+		eventEmitted = true
+	}
 
         var aliceBalanceAfter = await web3.eth.getBalance(alice).toNumber()
         var bobBalanceAfter = await web3.eth.getBalance(bob).toNumber()
@@ -78,14 +78,18 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
 
         var eventEmitted = false
-
+/*
         var event = supplyChain.Shipped()
         await event.watch((err, res) => {
             sku = res.args.sku.toString(10)
             eventEmitted = true
         })
-
-        await supplyChain.shipItem(sku, {from: alice})
+*/
+        const tx = await supplyChain.shipItem(sku, {from: alice})
+	if (tx.logs[0].event === "Shipped") {
+		sku = tx.logs[0].args.sku.toString(10)
+		eventEmitted = true
+	}
 
         const result = await supplyChain.fetchItem.call(sku)
 
@@ -97,14 +101,18 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
 
         var eventEmitted = false
-
+/*
         var event = supplyChain.Received()
         await event.watch((err, res) => {
             sku = res.args.sku.toString(10)
             eventEmitted = true
         })
-
-        await supplyChain.receiveItem(sku, {from: bob})
+*/
+        const tx = await supplyChain.receiveItem(sku, {from: bob})
+	if (tx.logs[0].event === "Received") {
+		sku = tx.logs[0].args.sku.toString(10)
+		eventEmitted = true
+	}
 
         const result = await supplyChain.fetchItem.call(sku)
 
