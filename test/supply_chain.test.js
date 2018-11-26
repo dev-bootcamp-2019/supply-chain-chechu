@@ -8,7 +8,7 @@ contract('SupplyChain', function(accounts) {
     const emptyAddress = '0x0000000000000000000000000000000000000000'
 
     var sku
-    const price = web3.toWei(1, "ether")
+    const price = web3.toBigNumber(web3.toWei(1, "ether"))
 
     it("should add an item with the provided name and price", async() => {
         const supplyChain = await SupplyChain.deployed()
@@ -23,9 +23,9 @@ contract('SupplyChain', function(accounts) {
 
         const name = "book"
 
-        await supplyChain.addItem(name, parseInt(price, 10), {from: alice})
+        await supplyChain.addItem(name, price, {from: alice})
 
-        const result = await supplyChain.fetchItem.call(parseInt(sku, 10))
+        const result = await supplyChain.fetchItem.call(sku)
 
         assert.equal(result[0], name, 'the name of the last added item does not match the expected value')
         assert.equal(result[2].toString(10), price, 'the price of the last added item does not match the expected value')
