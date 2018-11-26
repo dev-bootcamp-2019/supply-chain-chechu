@@ -14,21 +14,27 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
 
         var eventEmitted = false
-
+/*
         var event = supplyChain.ForSale()
         await event.watch((err, res) => {
 	    console.log('Event ForSale received!', {err}, {res}, res.args.sku)
             sku = res.args.sku.toString(10)
             eventEmitted = true
         })
-
+*/
         const name = "book"
 
 	console.log('Calling addItem...')
-        await supplyChain.addItem(name, price, {from: alice})
-	console.log('addItem done!')
+        // await supplyChain.addItem(name, price, {from: alice})
+	const tx = await supplyChain.addItem(name, price, {from: alice})
+	console.log('addItem done!', {tx})
+	if (tx.logs[0].event === "ForSale") {
+	        console.log('Event ForSale received!', tx.logs[0])
+		sku = tx.logs[0].args.sku.toString(10)
+		eventEmitted = true
+	}
 
-        const result = await supplyChain.fetchItem.call(0)
+        const result = await supplyChain.fetchItem.call(sku)
 
         assert.equal(result[0], name, 'the name of the last added item does not match the expected value')
         assert.equal(result[2].toString(10), price, 'the price of the last added item does not match the expected value')
