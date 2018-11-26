@@ -14,7 +14,7 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
 
         var eventEmitted = false
-/*
+/* Unused because it doesn't work on Travis as expected
         var event = supplyChain.ForSale()
         await event.watch((err, res) => {
             sku = res.args.sku.toString(10)
@@ -22,8 +22,6 @@ contract('SupplyChain', function(accounts) {
         })
 */
         const name = "book"
-
-        // await supplyChain.addItem(name, price, {from: alice})
 	const tx = await supplyChain.addItem(name, price, {from: alice})
 	if (tx.logs[0].event === "ForSale") {
 		sku = tx.logs[0].args.sku.toString(10)
@@ -44,7 +42,7 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
 
         var eventEmitted = false
-/*
+/* Unused because it doesn't work on Travis as expected
         var event = supplyChain.Sold()
         await event.watch((err, res) => {
             sku = res.args.sku.toString(10)
@@ -78,7 +76,7 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
 
         var eventEmitted = false
-/*
+/* Unused because it doesn't work on Travis as expected
         var event = supplyChain.Shipped()
         await event.watch((err, res) => {
             sku = res.args.sku.toString(10)
@@ -101,7 +99,7 @@ contract('SupplyChain', function(accounts) {
         const supplyChain = await SupplyChain.deployed()
 
         var eventEmitted = false
-/*
+/* Unused because it doesn't work on Travis as expected
         var event = supplyChain.Received()
         await event.watch((err, res) => {
             sku = res.args.sku.toString(10)
